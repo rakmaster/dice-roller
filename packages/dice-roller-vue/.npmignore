@@ -1,0 +1,6 @@
+src/
+*.test.ts
+*.spec.ts
+vite.config.ts
+.gitignore
+node_modules/
