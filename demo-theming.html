@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VDiceRoller Theming Demo</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f7fa;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 1em;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .demo-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .demo-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .demo-description {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .code-block {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 16px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 11px;
+      color: #333;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* Theme: Orange & Black */
+    .theme-orange-black {
+      --dice-primary-color: #ff6b35;
+      --dice-primary-hover: #e55a2b;
+      --dice-secondary-color: #1a1a1a;
+      --dice-error-color: #ff4757;
+      --dice-border-color: #ddd;
+      --dice-border-radius: 4px;
+      --dice-text-color: #333;
+      --dice-bg-color: white;
+      --dice-result-text: white;
+    }
+
+    /* Theme: Green & Teal */
+    .theme-green-teal {
+      --dice-primary-color: #10b981;
+      --dice-primary-hover: #059669;
+      --dice-secondary-color: #14b8a6;
+      --dice-error-color: #ef4444;
+      --dice-border-color: #d1d5db;
+      --dice-border-radius: 8px;
+      --dice-text-color: #1f2937;
+      --dice-bg-color: white;
+      --dice-result-text: white;
+    }
+
+    /* Theme: Dark Mode */
+    .theme-dark {
+      --dice-primary-color: #3b82f6;
+      --dice-primary-hover: #2563eb;
+      --dice-secondary-color: #8b5cf6;
+      --dice-error-color: #ef4444;
+      --dice-border-color: #374151;
+      --dice-border-radius: 6px;
+      --dice-text-color: #e5e7eb;
+      --dice-bg-color: #1f2937;
+      --dice-result-text: white;
+    }
+
+    .theme-dark .demo-card {
+      background: #111827;
+    }
+
+    /* Theme: Pink & Purple */
+    .theme-pink-purple {
+      --dice-primary-color: #ec4899;
+      --dice-primary-hover: #db2777;
+      --dice-secondary-color: #a855f7;
+      --dice-error-color: #f43f5e;
+      --dice-border-color: #fce7f3;
+      --dice-border-radius: 12px;
+      --dice-text-color: #831843;
+      --dice-bg-color: #fdf2f8;
+      --dice-result-text: white;
+    }
+
+    /* Theme: Red & Gold */
+    .theme-red-gold {
+      --dice-primary-color: #dc2626;
+      --dice-primary-hover: #b91c1c;
+      --dice-secondary-color: #f59e0b;
+      --dice-error-color: #991b1b;
+      --dice-border-color: #fca5a5;
+      --dice-border-radius: 4px;
+      --dice-text-color: #7f1d1d;
+      --dice-bg-color: #fef2f2;
+      --dice-result-text: white;
+    }
+
+    /* Theme: Monochrome */
+    .theme-mono {
+      --dice-primary-color: #374151;
+      --dice-primary-hover: #1f2937;
+      --dice-secondary-color: #6b7280;
+      --dice-error-color: #991b1b;
+      --dice-border-color: #d1d5db;
+      --dice-border-radius: 2px;
+      --dice-text-color: #111827;
+      --dice-bg-color: white;
+      --dice-result-text: white;
+    }
+
+    /* Theme: Cyberpunk */
+    .theme-cyber {
+      --dice-primary-color: #00ff9f;
+      --dice-primary-hover: #00cc7f;
+      --dice-secondary-color: #ff00ff;
+      --dice-error-color: #ff0055;
+      --dice-border-color: #00ff9f;
+      --dice-border-radius: 0;
+      --dice-text-color: #00ff9f;
+      --dice-bg-color: #0a0e27;
+      --dice-result-text: #0a0e27;
+    }
+
+    .theme-cyber .demo-card {
+      background: #0a0e27;
+      border: 2px solid #00ff9f;
+    }
+
+    /* Theme: Pastel */
+    .theme-pastel {
+      --dice-primary-color: #a8dadc;
+      --dice-primary-hover: #89c2c5;
+      --dice-secondary-color: #f1faee;
+      --dice-error-color: #e63946;
+      --dice-border-color: #f1faee;
+      --dice-border-radius: 16px;
+      --dice-text-color: #1d3557;
+      --dice-bg-color: #f1faee;
+      --dice-result-text: #1d3557;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>🎨 VDiceRoller Theming</h1>
+      <p class="subtitle">Customize colors with CSS variables - no component changes needed!</p>
+
+      <div class="demo-grid">
+        <!-- Default Theme -->
+        <div class="demo-card">
+          <div class="demo-title">Default (Purple/Indigo)</div>
+          <div class="demo-description">
+            Out-of-the-box styling with purple gradient.
+          </div>
+          <v-dice-roller notation="2d6+3"></v-dice-roller>
+          <div class="code-block">/* Uses default colors */
+&lt;v-dice-roller /&gt;</div>
+        </div>
+
+        <!-- Orange & Black -->
+        <div class="demo-card">
+          <div class="demo-title">Orange & Black</div>
+          <div class="demo-description">
+            Perfect for Halloween or bold branding.
+          </div>
+          <v-dice-roller notation="2d6+3" class="theme-orange-black"></v-dice-roller>
+          <div class="code-block">.theme-orange-black {
+  --dice-primary-color: #ff6b35;
+  --dice-secondary-color: #1a1a1a;
+}</div>
+        </div>
+
+        <!-- Green & Teal -->
+        <div class="demo-card">
+          <div class="demo-title">Green & Teal</div>
+          <div class="demo-description">
+            Fresh, natural color scheme.
+          </div>
+          <v-dice-roller notation="1d20" class="theme-green-teal"></v-dice-roller>
+          <div class="code-block">.theme-green-teal {
+  --dice-primary-color: #10b981;
+  --dice-secondary-color: #14b8a6;
+  --dice-border-radius: 8px;
+}</div>
+        </div>
+
+        <!-- Dark Mode -->
+        <div class="demo-card theme-dark">
+          <div class="demo-title" style="color: #e5e7eb;">Dark Mode</div>
+          <div class="demo-description" style="color: #9ca3af;">
+            Dark background with blue accent.
+          </div>
+          <v-dice-roller notation="3d6" class="theme-dark"></v-dice-roller>
+          <div class="code-block">.theme-dark {
+  --dice-primary-color: #3b82f6;
+  --dice-bg-color: #1f2937;
+  --dice-text-color: #e5e7eb;
+  --dice-border-color: #374151;
+}</div>
+        </div>
+
+        <!-- Pink & Purple -->
+        <div class="demo-card">
+          <div class="demo-title">Pink & Purple</div>
+          <div class="demo-description">
+            Vibrant, playful aesthetic.
+          </div>
+          <v-dice-roller notation="4d6" class="theme-pink-purple"></v-dice-roller>
+          <div class="code-block">.theme-pink-purple {
+  --dice-primary-color: #ec4899;
+  --dice-secondary-color: #a855f7;
+  --dice-bg-color: #fdf2f8;
+  --dice-border-radius: 12px;
+}</div>
+        </div>
+
+        <!-- Red & Gold -->
+        <div class="demo-card">
+          <div class="demo-title">Red & Gold</div>
+          <div class="demo-description">
+            Bold, regal color combination.
+          </div>
+          <v-dice-roller notation="1d12" class="theme-red-gold"></v-dice-roller>
+          <div class="code-block">.theme-red-gold {
+  --dice-primary-color: #dc2626;
+  --dice-secondary-color: #f59e0b;
+  --dice-bg-color: #fef2f2;
+}</div>
+        </div>
+
+        <!-- Monochrome -->
+        <div class="demo-card">
+          <div class="demo-title">Monochrome</div>
+          <div class="demo-description">
+            Minimal grayscale design.
+          </div>
+          <v-dice-roller notation="2d8" class="theme-mono"></v-dice-roller>
+          <div class="code-block">.theme-mono {
+  --dice-primary-color: #374151;
+  --dice-secondary-color: #6b7280;
+  --dice-border-radius: 2px;
+}</div>
+        </div>
+
+        <!-- Cyberpunk -->
+        <div class="demo-card theme-cyber">
+          <div class="demo-title" style="color: #00ff9f;">Cyberpunk</div>
+          <div class="demo-description" style="color: #00ff9f; opacity: 0.7;">
+            Neon green and magenta vibes.
+          </div>
+          <v-dice-roller notation="1d100" class="theme-cyber"></v-dice-roller>
+          <div class="code-block">.theme-cyber {
+  --dice-primary-color: #00ff9f;
+  --dice-secondary-color: #ff00ff;
+  --dice-bg-color: #0a0e27;
+  --dice-text-color: #00ff9f;
+  --dice-border-radius: 0;
+}</div>
+        </div>
+
+        <!-- Pastel -->
+        <div class="demo-card">
+          <div class="demo-title">Pastel</div>
+          <div class="demo-description">
+            Soft, muted colors.
+          </div>
+          <v-dice-roller notation="3d4" class="theme-pastel"></v-dice-roller>
+          <div class="code-block">.theme-pastel {
+  --dice-primary-color: #a8dadc;
+  --dice-secondary-color: #f1faee;
+  --dice-result-text: #1d3557;
+  --dice-border-radius: 16px;
+}</div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-title">Available CSS Variables</div>
+        <div class="code-block">/* All customizable variables */
+--dice-primary-color: #667eea;      /* Main brand color */
+--dice-primary-hover: #5568d3;      /* Hover state */
+--dice-secondary-color: #764ba2;    /* Gradient end color */
+--dice-error-color: #ff4757;        /* Error messages */
+--dice-border-color: #ddd;          /* Input borders */
+--dice-border-radius: 4px;          /* Corner rounding */
+--dice-text-color: #333;            /* Text color */
+--dice-bg-color: white;             /* Input backgrounds */
+--dice-result-text: white;          /* Result text color */</div>
+      </div>
+
+      <div class="demo-card">
+        <div class="demo-title">Usage in Your App</div>
+        <div class="code-block">&lt;!-- Wrap component in themed container --&gt;
+&lt;div class="my-orange-theme"&gt;
+  &lt;VDiceRoller notation="2d6+3" /&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+.my-orange-theme {
+  --dice-primary-color: #ff6b35;
+  --dice-secondary-color: #1a1a1a;
+}
+&lt;/style&gt;</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const { createApp } = Vue;
+
+    // Inline dice roller core
+    const DIE_TYPES = [4, 6, 8, 10, 12, 20, 100];
+    const MIN_DICE_COUNT = 1;
+    const MAX_DICE_COUNT = 100;
+    const DICE_NOTATION_REGEX = /^(\d+)d(\d+)([+-]\d+)?$/i;
+
+    function createSeededRandom(seed) {
+      let state = seed;
+      return function() {
+        state = (state + 0x6D2B79F5) | 0;
+        let t = Math.imul(state ^ (state >>> 15), state | 1);
+        t = (t + Math.imul(t ^ (t >>> 7), t | 61)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function randomInt(min, max, rng = Math.random) {
+      return Math.floor(rng() * (max - min + 1)) + min;
+    }
+
+    function parseDiceNotation(notation) {
+      const trimmed = notation.trim();
+      const match = DICE_NOTATION_REGEX.exec(trimmed);
+      
+      if (!match) {
+        throw new Error(`Invalid dice notation "${notation}": format must be XdY or XdY±Z`);
+      }
+      
+      const count = parseInt(match[1], 10);
+      const sides = parseInt(match[2], 10);
+      const modifier = match[3] ? parseInt(match[3], 10) : 0;
+      
+      if (count < MIN_DICE_COUNT || count > MAX_DICE_COUNT) {
+        throw new Error(`Invalid dice count ${count}: must be between 1 and 100`);
+      }
+      
+      if (!DIE_TYPES.includes(sides)) {
+        throw new Error(`Invalid die type d${sides}: must be d4, d6, d8, d10, d12, d20, or d100`);
+      }
+      
+      return { count, sides, modifier };
+    }
+
+    function rollDetailed(notation, options = {}) {
+      const parsed = parseDiceNotation(notation);
+      const rng = options.seed !== undefined 
+        ? createSeededRandom(options.seed)
+        : Math.random;
+      
+      const rolls = [];
+      for (let i = 0; i < parsed.count; i++) {
+        rolls.push(randomInt(1, parsed.sides, rng));
+      }
+      
+      const total = rolls.reduce((sum, roll) => sum + roll, 0) + parsed.modifier;
+      
+      return {
+        rolls,
+        modifier: parsed.modifier,
+        total,
+        notation: notation.trim(),
+      };
+    }
+
+    // Component (simplified for demo)
+    const VDiceRollerComponent = {
+      template: `
+        <div class="v-dice-roller">
+          <div class="dice-input-group">
+            <input
+              v-model="localNotation"
+              @keyup.enter="handleRoll"
+              placeholder="e.g., 2d6+3"
+              class="dice-input"
+              type="text"
+            />
+            <button @click="handleRoll" class="dice-roll-btn">🎲</button>
+          </div>
+          <div v-if="error" class="dice-error">{{ error }}</div>
+          <div v-if="result" class="dice-result">
+            <div class="result-notation">{{ result.notation }}</div>
+            <div class="result-total">{{ result.total }}</div>
+            <div v-if="result.rolls" class="result-details">
+              [{{ result.rolls.join(', ') }}]<span v-if="result.modifier !== 0"> {{ result.modifier > 0 ? '+' : '' }}{{ result.modifier }}</span>
+            </div>
+          </div>
+        </div>
+      `,
+      props: {
+        notation: { type: String, default: '2d6' }
+      },
+      data() {
+        return {
+          localNotation: this.notation,
+          result: null,
+          error: null
+        };
+      },
+      methods: {
+        handleRoll() {
+          try {
+            this.error = null;
+            this.result = rollDetailed(this.localNotation);
+          } catch (err) {
+            this.error = err.message;
+            this.result = null;
+          }
+        }
+      },
+      mounted() {
+        this.handleRoll();
+      }
+    };
+
+    // Add component styles
+    const style = document.createElement('style');
+    style.textContent = `
+      .v-dice-roller {
+        --dice-primary-color: #667eea;
+        --dice-primary-hover: #5568d3;
+        --dice-secondary-color: #764ba2;
+        --dice-error-color: #ff4757;
+        --dice-border-color: #ddd;
+        --dice-border-radius: 4px;
+        --dice-text-color: #333;
+        --dice-bg-color: white;
+        --dice-result-text: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      }
+      
+      /* Theme overrides */
+      .theme-orange-black { --dice-primary-color: #ff6b35; --dice-primary-hover: #e55a2b; --dice-secondary-color: #1a1a1a; }
+      .theme-green-teal { --dice-primary-color: #10b981; --dice-primary-hover: #059669; --dice-secondary-color: #14b8a6; --dice-border-radius: 8px; }
+      .theme-dark { --dice-primary-color: #3b82f6; --dice-primary-hover: #2563eb; --dice-secondary-color: #8b5cf6; --dice-bg-color: #1f2937; --dice-text-color: #e5e7eb; --dice-border-color: #374151; }
+      .theme-pink-purple { --dice-primary-color: #ec4899; --dice-primary-hover: #db2777; --dice-secondary-color: #a855f7; --dice-bg-color: #fdf2f8; --dice-text-color: #831843; --dice-border-color: #fce7f3; --dice-border-radius: 12px; }
+      .theme-red-gold { --dice-primary-color: #dc2626; --dice-primary-hover: #b91c1c; --dice-secondary-color: #f59e0b; --dice-bg-color: #fef2f2; --dice-text-color: #7f1d1d; --dice-border-color: #fca5a5; }
+      .theme-mono { --dice-primary-color: #374151; --dice-primary-hover: #1f2937; --dice-secondary-color: #6b7280; --dice-border-radius: 2px; }
+      .theme-cyber { --dice-primary-color: #00ff9f; --dice-primary-hover: #00cc7f; --dice-secondary-color: #ff00ff; --dice-bg-color: #0a0e27; --dice-text-color: #00ff9f; --dice-border-color: #00ff9f; --dice-border-radius: 0; --dice-result-text: #0a0e27; }
+      .theme-pastel { --dice-primary-color: #a8dadc; --dice-primary-hover: #89c2c5; --dice-secondary-color: #f1faee; --dice-bg-color: #f1faee; --dice-text-color: #1d3557; --dice-border-color: #f1faee; --dice-border-radius: 16px; --dice-result-text: #1d3557; }
+      
+      .dice-input-group { display: flex; gap: 8px; margin-bottom: 12px; }
+      .dice-input { flex: 1; padding: 8px 12px; border: 1px solid var(--dice-border-color); border-radius: var(--dice-border-radius); font-size: 14px; background: var(--dice-bg-color); color: var(--dice-text-color); }
+      .dice-input:focus { outline: none; border-color: var(--dice-primary-color); }
+      .dice-roll-btn { padding: 8px 16px; background: var(--dice-primary-color); color: var(--dice-result-text); border: none; border-radius: var(--dice-border-radius); font-size: 14px; cursor: pointer; }
+      .dice-roll-btn:hover { background: var(--dice-primary-hover); }
+      .dice-error { background: var(--dice-error-color); color: var(--dice-result-text); padding: 10px 12px; border-radius: var(--dice-border-radius); margin-bottom: 12px; font-size: 13px; }
+      .dice-result { background: linear-gradient(135deg, var(--dice-primary-color) 0%, var(--dice-secondary-color) 100%); color: var(--dice-result-text); border-radius: 8px; padding: 16px; text-align: center; }
+      .result-notation { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
+      .result-total { font-size: 48px; font-weight: bolsd; line-height: 1; }
+      .result-details { font-size: 13px; opacity: 0.85; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.3); }
+    `;
+    document.head.appendChild(style);
+
+    createApp({
+      components: {
+        'v-dice-roller': VDiceRollerComponent
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

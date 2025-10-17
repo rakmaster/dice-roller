@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dice Roller - Framework-Agnostic Dice Rolling Library</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">🎲 Dice Roller</div>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="component.html">Component</a>
+        <a href="https://github.com/rakmaster/dice-roller" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="app">
+    <header class="hero">
+      <div class="container">
+        <h1>🎲 Dice Roller</h1>
+        <p class="hero-subtitle">Framework-agnostic dice rolling library with highly configurable Vue 3 component</p>
+        <div class="hero-buttons">
+          <a href="#install" class="btn btn-primary">Get Started</a>
+          <a href="https://github.com/rakmaster/dice-roller" class="btn btn-secondary">View on GitHub</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="demo-section">
+      <div class="container">
+        <h2>Try It Out</h2>
+        <p class="section-subtitle">Roll some dice right here in your browser</p>
+        <div class="demo-card">
+          <v-dice-roller notation="2d6+3" :show-history="true"></v-dice-roller>
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section">
+      <div class="container">
+        <h2>Features</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">✨</div>
+            <h3>Framework-Agnostic</h3>
+            <p>Core library works with any JavaScript framework or vanilla JS</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>Fully Themeable</h3>
+            <p>CSS variables for complete color customization</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📦</div>
+            <h3>Zero Dependencies</h3>
+            <p>Core library has no runtime dependencies</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Lightweight</h3>
+            <p>&lt;10KB minified + gzipped</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>TypeScript</h3>
+            <p>Full type safety and IntelliSense support</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3>Configurable</h3>
+            <p>20+ props to control display and behavior</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <h3>Validation Rules</h3>
+            <p>Flexible rules system for game-specific constraints</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎰</div>
+            <h3>15 Named Slots</h3>
+            <p>Customize any part of the component</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔌</div>
+            <h3>Plugin System</h3>
+            <p>Add animations, sounds, and effects via plugins</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="install" class="install-section">
+      <div class="container">
+        <h2>Installation</h2>
+        
+        <div class="install-option">
+          <h3>Core Library (Framework-Agnostic)</h3>
+          <p>Use with any JavaScript framework or vanilla JS</p>
+          <pre><code>npm install @dice-roller/core</code></pre>
+          <div class="code-example">
+            <h4>Usage:</h4>
+            <pre><code>import { roll, rollDetailed } from '@dice-roller/core';
+
+// Simple roll
+const result = roll("2d6+3");
+console.log(result.total); // 5-15
+
+// Detailed roll
+const detailed = rollDetailed("3d6+3");
+console.log(detailed.rolls);    // [4, 6, 2]
+console.log(detailed.modifier); // 3
+console.log(detailed.total);    // 15</code></pre>
+          </div>
+        </div>
+
+        <div class="install-option">
+          <h3>Vue Component</h3>
+          <p>Ready-to-use Vue 3 component with tons of options</p>
+          <pre><code>npm install @dice-roller/vue</code></pre>
+          <div class="code-example">
+            <h4>Usage:</h4>
+            <pre><code>&lt;template&gt;
+  &lt;VDiceRoller notation="2d6+3" /&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { VDiceRoller } from '@dice-roller/vue';
+&lt;/script&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="examples-section">
+      <div class="container">
+        <h2>Explore More</h2>
+        <div class="examples-grid">
+          <a href="component.html" class="example-card">
+            <div class="example-icon">📚</div>
+            <h3>Interactive Documentation</h3>
+            <p>Comprehensive guide with live playground and API reference</p>
+            <span class="example-link">Explore Component →</span>
+          </a>
+          <a href="component.html#theming" class="example-card">
+            <div class="example-icon">🎨</div>
+            <h3>Theming</h3>
+            <p>Customize colors with CSS variables - 9 pre-built themes</p>
+            <span class="example-link">View Themes →</span>
+          </a>
+          <a href="component.html#api" class="example-card">
+            <div class="example-icon">🔧</div>
+            <h3>API Reference</h3>
+            <p>Complete props, slots, and CSS variables documentation</p>
+            <span class="example-link">View API →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <p>Built with ❤️ for the RPG and gaming community</p>
+        <p>
+          <a href="https://github.com/rakmaster/dice-roller">GitHub</a> •
+          <a href="https://github.com/rakmaster/dice-roller/issues">Issues</a> •
+          <a href="mailto:logan@phantasea.net">Contact</a>
+        </p>
+        <p style="font-size: 12px; opacity: 0.7; margin-top: 12px;">
+          Component design inspired by the fantastic work of the <a href="https://vuetifyjs.com" target="_blank" style="color: inherit;">Vuetify team</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

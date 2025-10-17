@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VDiceRoller Component - Dice Roller</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .playground-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 60px 20px 80px;
+      margin-bottom: -40px;
+    }
+    .playground-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .playground-controls {
+      background: #f8f9fa;
+      padding: 24px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .control-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .control-input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      background: white;
+    }
+    .control-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+    }
+    .control-checkbox input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    .control-checkbox label {
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+    }
+    .playground-preview {
+      padding: 40px 24px;
+      background: white;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .playground-code {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px 24px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      border-top: 1px solid #e0e0e0;
+    }
+    .code-tag { color: #569cd6; }
+    .code-attr { color: #9cdcfe; }
+    .code-value { color: #ce9178; }
+    .code-bool { color: #4ec9b0; }
+    
+    .section-anchor {
+      color: #667eea;
+      text-decoration: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      margin-left: -24px;
+      padding-right: 8px;
+    }
+    h3:hover .section-anchor {
+      opacity: 1;
+    }
+    
+    .example-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .example-preview {
+      padding: 24px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .example-code {
+      background: #f8f9fa;
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .example-code.expanded {
+      max-height: 500px;
+      padding: 16px 24px;
+    }
+    .code-toggle {
+      padding: 12px 24px;
+      background: #f8f9fa;
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      width: 100%;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      color: #667eea;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .code-toggle:hover {
+      background: #e9ecef;
+    }
+    .code-toggle-icon {
+      transition: transform 0.3s;
+    }
+    .code-toggle-icon.expanded {
+      transform: rotate(180deg);
+    }
+    
+    .api-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .api-table th {
+      background: #667eea;
+      color: white;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .api-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 13px;
+    }
+    .api-table tr:last-child td {
+      border-bottom: none;
+    }
+    .api-table code {
+      background: #f8f9fa;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      color: #667eea;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">🎲 Dice Roller</div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="component.html" class="active">Component</a>
+        <a href="https://github.com/rakmaster/dice-roller" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <div id="app">
+    <!-- Interactive Playground -->
+    <section class="playground-section">
+      <div class="container">
+        <h1 style="margin-bottom: 8px;">VDiceRoller Component</h1>
+        <p style="opacity: 0.9; margin-bottom: 40px;">Interactive playground - adjust the controls to see live updates</p>
+        
+        <div>
+        <div class="playground-card">
+          <div class="playground-controls">
+            <div class="control-grid">
+              <div class="control-group">
+                <label class="control-label">Notation</label>
+                <input v-model="config.notation" class="control-input" placeholder="e.g., 2d6+3">
+              </div>
+              <div class="control-group">
+                <label class="control-label">Variant</label>
+                <select v-model="config.variant" class="control-input">
+                  <option value="default">Default</option>
+                  <option value="compact">Compact</option>
+                  <option value="inline">Inline</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Input Type</label>
+                <select v-model="config.inputType" class="control-input">
+                  <option value="text">Text</option>
+                  <option value="select">Select</option>
+                  <option value="combo">Combo</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label class="control-label">Result Size</label>
+                <select v-model="config.resultSize" class="control-input">
+                  <option value="small">Small</option>
+                  <option value="medium">Medium</option>
+                  <option value="large">Large</option>
+                </select>
+              </div>
+            </div>
+            <div class="control-grid" style="margin-top: 16px;">
+              <div class="control-checkbox">
+                <input type="checkbox" id="show-history" v-model="config.showHistory">
+                <label for="show-history">Show History</label>
+              </div>
+              <div class="control-checkbox">
+                <input type="checkbox" id="show-details" v-model="config.showDetails">
+                <label for="show-details">Show Details</label>
+              </div>
+              <div class="control-checkbox">
+                <input type="checkbox" id="show-presets" v-model="config.showPresets">
+                <label for="show-presets">Show Presets</label>
+              </div>
+              <div class="control-checkbox">
+                <input type="checkbox" id="minimal" v-model="config.minimal">
+                <label for="minimal">Minimal Mode</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="playground-preview">
+            <v-dice-roller
+              :notation="config.notation"
+              :variant="config.variant"
+              :input-type="config.inputType"
+              :result-size="config.resultSize"
+              :show-history="config.showHistory"
+              :show-details="config.showDetails"
+              :show-presets="config.showPresets"
+              :minimal="config.minimal"
+            ></v-dice-roller>
+          </div>
+          
+          <div class="playground-code">
+            <span class="code-tag">&lt;v-dice-roller</span><br>
+            <span class="code-attr">  notation</span>=<span class="code-value">"{{ config.notation }}"</span><br>
+            <span class="code-attr">  variant</span>=<span class="code-value">"{{ config.variant }}"</span><br>
+            <span class="code-attr">  input-type</span>=<span class="code-value">"{{ config.inputType }}"</span><br>
+            <span class="code-attr">  result-size</span>=<span class="code-value">"{{ config.resultSize }}"</span><br>
+            <span v-if="config.showHistory" class="code-attr">  :show-history</span>=<span class="code-bool">"true"</span><br>
+            <span v-if="config.showDetails" class="code-attr">  :show-details</span>=<span class="code-bool">"true"</span><br>
+            <span v-if="config.showPresets" class="code-attr">  :show-presets</span>=<span class="code-bool">"true"</span><br>
+            <span v-if="config.minimal" class="code-attr">  :minimal</span>=<span class="code-bool">"true"</span><br>
+            <span class="code-tag">/&gt;</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <section style="padding: 60px 20px;">
+    <div class="container">
+        
+        <!-- Usage Section -->
+        <h3 id="usage" class="section-header">
+          <a href="#usage" class="section-anchor">#</a>
+          Usage
+        </h3>
+        <p style="margin-bottom: 24px;">Basic examples showing common configurations of the dice roller component.</p>
+        
+        <div class="demo-card-wrapper" style="margin-bottom: 32px; background: #f0f9ff; border-left: 4px solid #3b82f6;">
+          <div class="demo-title">✨ Two-Way Binding with v-model</div>
+          <div class="demo-description">
+            Use <code>v-model:notation</code> to sync the notation with parent component state. Changes in the component automatically update the bound variable, and vice versa.
+          </div>
+          <div class="code-block" style="margin-top: 12px;">&lt;script setup&gt;
+import { ref } from 'vue';
+const diceNotation = ref('2d6+3');
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;VDiceRoller v-model:notation="diceNotation" /&gt;
+  
+  &lt;!-- External input synced to same data --&gt;
+  &lt;input v-model="diceNotation" /&gt;
+&lt;/template&gt;</div>
+        </div>
+        
+        <div class="demo-card-wrapper" style="margin-bottom: 32px; background: #fef3c7; border-left: 4px solid #f59e0b;">
+          <div class="demo-title">🛡️ Validation Rules</div>
+          <div class="demo-description">
+            Add Vuetify-style validation rules to enforce game-specific constraints. Rules run before each roll.
+          </div>
+          <div class="code-block" style="margin-top: 12px;">&lt;script setup&gt;
+const rules = [
+  v => !!v || 'Notation required',
+  v => {
+    const match = v.match(/(\d+)d/);
+    return !match || parseInt(match[1]) <= 10 || 'Max 10 dice';
+  }
+];
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;VDiceRoller 
+    notation="2d6"
+    :rules="rules"
+    @validation-error="onError"
+  /&gt;
+&lt;/template&gt;</div>
+        </div>
+        
+        <div class="demo-grid">
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Default</div>
+            <div class="demo-description">Standard configuration with text input and roll button.</div>
+            <v-dice-roller notation="2d6+3"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">With History</div>
+            <div class="demo-description">Track previous rolls with the history feature.</div>
+            <v-dice-roller notation="1d20" :show-history="true"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">With Presets</div>
+            <div class="demo-description">Quick roll buttons for common dice combinations.</div>
+            <v-dice-roller notation="2d6" :show-presets="true"></v-dice-roller>
+          </div>
+        </div>
+
+        <!-- Input Types Section -->
+        <h3 id="input-types" class="section-header">
+          <a href="#input-types" class="section-anchor">#</a>
+          Input Types
+        </h3>
+        <p style="margin-bottom: 24px;">Choose between text input, dropdown select, or a combination of both.</p>
+        
+        <div class="demo-grid">
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Text Input</div>
+            <div class="demo-description">Free-form text input for custom notation.</div>
+            <v-dice-roller input-type="text" notation="2d6+3"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Select Dropdown</div>
+            <div class="demo-description">Choose from preset dice combinations.</div>
+            <v-dice-roller input-type="select" notation="1d20" :auto-roll="true"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Combo (Text + Select)</div>
+            <div class="demo-description">Text input with dropdown for quick access.</div>
+            <v-dice-roller input-type="combo" notation="2d6"></v-dice-roller>
+          </div>
+        </div>
+
+        <!-- Visual Styling Section -->
+        <h3 id="styling" class="section-header">
+          <a href="#styling" class="section-anchor">#</a>
+          Visual Styling
+        </h3>
+        <p style="margin-bottom: 24px;">Adjust the size and layout to fit your design needs.</p>
+        
+        <div class="demo-grid">
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Small Result</div>
+            <div class="demo-description">Compact result display for tight spaces.</div>
+            <v-dice-roller notation="2d6+3" result-size="small"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Large Result</div>
+            <div class="demo-description">Prominent result display for emphasis.</div>
+            <v-dice-roller notation="2d6+3" result-size="large"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Compact Variant</div>
+            <div class="demo-description">Reduced spacing throughout component.</div>
+            <v-dice-roller notation="1d20" variant="compact"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Inline Variant</div>
+            <div class="demo-description">Horizontal layout for inline use.</div>
+            <v-dice-roller notation="1d6" variant="inline" :show-details="false"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Minimal Mode</div>
+            <div class="demo-description">Just the result, no notation label.</div>
+            <v-dice-roller notation="3d6" :minimal="true"></v-dice-roller>
+          </div>
+        </div>
+
+        <!-- Theming Section -->
+        <h3 id="theming" class="section-header">
+          <a href="#theming" class="section-anchor">#</a>
+          Theming
+        </h3>
+        <p style="margin-bottom: 24px;">Customize colors with CSS variables - no component changes needed.</p>
+        
+        <div class="demo-grid">
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Default Theme</div>
+            <div class="demo-description">Out-of-the-box purple gradient.</div>
+            <v-dice-roller notation="2d6+3"></v-dice-roller>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Orange & Black</div>
+            <div class="demo-description">Bold color scheme.</div>
+            <v-dice-roller notation="2d6+3" class="theme-orange-black"></v-dice-roller>
+            <div class="code-block" style="margin-top: 12px;">.theme-orange-black {
+  --dice-primary-color: #ff6b35;
+  --dice-secondary-color: #1a1a1a;
+}</div>
+          </div>
+          
+          <div class="demo-card-wrapper">
+            <div class="demo-title">Green & Teal</div>
+            <div class="demo-description">Fresh, natural colors.</div>
+            <v-dice-roller notation="1d20" class="theme-green-teal"></v-dice-roller>
+            <div class="code-block" style="margin-top: 12px;">.theme-green-teal {
+  --dice-primary-color: #10b981;
+  --dice-secondary-color: #14b8a6;
+}</div>
+          </div>
+        </div>
+
+        <!-- API Reference -->
+        <h3 id="api" class="section-header">
+          <a href="#api" class="section-anchor">#</a>
+          API Reference
+        </h3>
+        
+        <h4 style="margin: 32px 0 16px; font-size: 18px; font-weight: 600;">Props</h4>
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>notation</code></td>
+              <td>String</td>
+              <td><code>'2d6'</code></td>
+              <td>Initial dice notation (e.g., "2d6+3"). Supports v-model: <code>v-model:notation</code></td>
+            </tr>
+            <tr>
+              <td><code>variant</code></td>
+              <td>String</td>
+              <td><code>'default'</code></td>
+              <td>Display variant: 'default', 'compact', or 'inline'</td>
+            </tr>
+            <tr>
+              <td><code>input-type</code></td>
+              <td>String</td>
+              <td><code>'text'</code></td>
+              <td>Input type: 'text', 'select', or 'combo'</td>
+            </tr>
+            <tr>
+              <td><code>result-size</code></td>
+              <td>String</td>
+              <td><code>'medium'</code></td>
+              <td>Result display size: 'small', 'medium', or 'large'</td>
+            </tr>
+            <tr>
+              <td><code>show-history</code></td>
+              <td>Boolean</td>
+              <td><code>false</code></td>
+              <td>Display roll history</td>
+            </tr>
+            <tr>
+              <td><code>show-details</code></td>
+              <td>Boolean</td>
+              <td><code>true</code></td>
+              <td>Show individual roll breakdown</td>
+            </tr>
+            <tr>
+              <td><code>show-presets</code></td>
+              <td>Boolean</td>
+              <td><code>false</code></td>
+              <td>Show quick roll preset buttons</td>
+            </tr>
+            <tr>
+              <td><code>minimal</code></td>
+              <td>Boolean</td>
+              <td><code>false</code></td>
+              <td>Hide notation label, show only result</td>
+            </tr>
+            <tr>
+              <td><code>auto-roll</code></td>
+              <td>Boolean</td>
+              <td><code>false</code></td>
+              <td>Automatically roll on mount or notation change</td>
+            </tr>
+            <tr>
+              <td><code>rules</code></td>
+              <td>Array</td>
+              <td><code>[]</code></td>
+              <td>Validation rules. Each rule: <code>(notation) => true | false | string</code></td>
+            </tr>
+            <tr>
+              <td><code>disabled</code></td>
+              <td>Boolean</td>
+              <td><code>false</code></td>
+              <td>Disable rolling (button becomes unclickable)</td>
+            </tr>
+            <tr>
+              <td><code>loading</code></td>
+              <td>Boolean</td>
+              <td><code>false</code></td>
+              <td>Show loading state (⏳ in button, prevents rolling)</td>
+            </tr>
+            <tr>
+              <td><code>animation-plugin</code></td>
+              <td>Object</td>
+              <td><code>null</code></td>
+              <td>Animation plugin with <code>async roll(notation, options)</code> method. Result displays after animation completes.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin: 32px 0 16px; font-size: 18px; font-weight: 600;">Slots</h4>
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Props</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>prepend</code></td>
+              <td><code>{ notation, roll }</code></td>
+              <td>Content before the component</td>
+            </tr>
+            <tr>
+              <td><code>button</code></td>
+              <td><code>{ roll }</code></td>
+              <td>Custom roll button content</td>
+            </tr>
+            <tr>
+              <td><code>result</code></td>
+              <td><code>{ result, notation, total, rolls, modifier }</code></td>
+              <td>Complete custom result display</td>
+            </tr>
+            <tr>
+              <td><code>result-total</code></td>
+              <td><code>{ total }</code></td>
+              <td>Custom total display</td>
+            </tr>
+            <tr>
+              <td><code>actions</code></td>
+              <td><code>{ result, history, roll, clear }</code></td>
+              <td>Action buttons area</td>
+            </tr>
+            <tr>
+              <td><code>history-item</code></td>
+              <td><code>{ item, index }</code></td>
+              <td>Custom history item rendering</td>
+            </tr>
+            <tr>
+              <td><code>append</code></td>
+              <td><code>{ result, history, roll }</code></td>
+              <td>Content after the component</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin: 32px 0 16px; font-size: 18px; font-weight: 600;">Events</h4>
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Payload</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>@before-roll</code></td>
+              <td><code>{ notation: string }</code></td>
+              <td>Emitted before the roll is executed</td>
+            </tr>
+            <tr>
+              <td><code>@after-roll</code></td>
+              <td><code>{ notation, total, rolls, modifier }</code></td>
+              <td>Emitted after the roll completes successfully</td>
+            </tr>
+            <tr>
+              <td><code>@roll</code></td>
+              <td><code>{ notation, total, rolls, modifier }</code></td>
+              <td>Emitted after roll (backwards compatibility)</td>
+            </tr>
+            <tr>
+              <td><code>@error</code></td>
+              <td><code>Error</code></td>
+              <td>Emitted when roll fails (invalid notation)</td>
+            </tr>
+            <tr>
+              <td><code>@validation-error</code></td>
+              <td><code>string</code></td>
+              <td>Emitted when validation rules fail</td>
+            </tr>
+            <tr>
+              <td><code>@update:notation</code></td>
+              <td><code>string</code></td>
+              <td>Emitted when notation changes (for v-model)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin: 32px 0 16px; font-size: 18px; font-weight: 600;">Exposed Methods & State</h4>
+        <p style="margin-bottom: 16px; color: #666;">Access via template refs for programmatic control:</p>
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>roll()</code></td>
+              <td>Method</td>
+              <td>Trigger a roll programmatically</td>
+            </tr>
+            <tr>
+              <td><code>clearHistory()</code></td>
+              <td>Method</td>
+              <td>Clear the roll history</td>
+            </tr>
+            <tr>
+              <td><code>result</code></td>
+              <td>Ref</td>
+              <td>Current roll result (reactive)</td>
+            </tr>
+            <tr>
+              <td><code>history</code></td>
+              <td>Ref</td>
+              <td>Roll history array (reactive)</td>
+            </tr>
+            <tr>
+              <td><code>error</code></td>
+              <td>Ref</td>
+              <td>Error message if any (reactive)</td>
+            </tr>
+            <tr>
+              <td><code>notation</code></td>
+              <td>Ref</td>
+              <td>Current notation (reactive)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin: 32px 0 16px; font-size: 18px; font-weight: 600;">CSS Variables</h4>
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--dice-primary-color</code></td>
+              <td><code>#667eea</code></td>
+              <td>Primary button and accent color</td>
+            </tr>
+            <tr>
+              <td><code>--dice-secondary-color</code></td>
+              <td><code>#764ba2</code></td>
+              <td>Secondary gradient color</td>
+            </tr>
+            <tr>
+              <td><code>--dice-border-radius</code></td>
+              <td><code>4px</code></td>
+              <td>Border radius for inputs and buttons</td>
+            </tr>
+            <tr>
+              <td><code>--dice-text-color</code></td>
+              <td><code>#333</code></td>
+              <td>Primary text color</td>
+            </tr>
+            <tr>
+              <td><code>--dice-bg-color</code></td>
+              <td><code>white</code></td>
+              <td>Background color for inputs</td>
+            </tr>
+            <tr>
+              <td><code>--dice-result-text</code></td>
+              <td><code>white</code></td>
+              <td>Text color in result display</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Built with ❤️ for the RPG and gaming community</p>
+      <p>
+        <a href="https://github.com/rakmaster/dice-roller">GitHub</a> •
+        <a href="index.html">Home</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    window.skipAutoMount = true;
+  </script>
+  <script src="app.js"></script>
+  
+  <script>
+    // Wait for app.js to load
+    window.addEventListener('DOMContentLoaded', () => {
+      const { createApp } = Vue;
+      const VDiceRoller = window.VDiceRollerComponent;
+      
+      if (!VDiceRoller) {
+        console.error('VDiceRollerComponent not found!');
+        return;
+      }
+      
+      // Single App for entire page
+      createApp({
+        data() {
+          return {
+            config: {
+              notation: '2d6+3',
+              variant: 'default',
+              inputType: 'text',
+              resultSize: 'medium',
+              showHistory: false,
+              showDetails: true,
+              showPresets: false,
+              minimal: false
+            }
+          }
+        },
+        components: {
+          'v-dice-roller': VDiceRoller
+        }
+      }).mount('#app');
+    });
+  </script>
+</body>
+</html>

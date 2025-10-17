@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VDiceRoller Component Demo</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f7fa;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2em;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 1em;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .demo-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .demo-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .demo-description {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .code-block {
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 16px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      color: #333;
+      overflow-x: auto;
+    }
+
+    .props-list {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 16px;
+      font-size: 12px;
+    }
+
+    .props-list code {
+      background: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #667eea;
+      font-family: 'Monaco', 'Courier New', monospace;
+    }
+
+    .section-header {
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="container">
+      <h1>🎲 VDiceRoller Component</h1>
+      <p class="subtitle">Flexible, configurable Vue 3 dice roller component</p>
+
+      <h2 class="section-header">Basic Configurations</h2>
+      <div class="demo-grid">
+        <!-- Default -->
+        <div class="demo-card">
+          <div class="demo-title">Default</div>
+          <div class="demo-description">
+            Standard configuration with text input and roll button.
+          </div>
+          <v-dice-roller notation="2d6+3"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller notation="2d6+3" /&gt;</div>
+        </div>
+
+        <!-- Compact -->
+        <div class="demo-card">
+          <div class="demo-title">Compact Variant</div>
+          <div class="demo-description">
+            Smaller padding and font sizes for tight spaces.
+          </div>
+          <v-dice-roller notation="1d20" variant="compact"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller variant="compact" /&gt;</div>
+        </div>
+
+        <!-- Minimal -->
+        <div class="demo-card">
+          <div class="demo-title">Minimal</div>
+          <div class="demo-description">
+            Just the total, no notation label.
+          </div>
+          <v-dice-roller notation="3d6" :minimal="true"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller :minimal="true" /&gt;</div>
+        </div>
+      </div>
+
+      <h2 class="section-header">Input Types</h2>
+      <div class="demo-grid">
+        <!-- Text Input -->
+        <div class="demo-card">
+          <div class="demo-title">Text Input</div>
+          <div class="demo-description">
+            Free-form text input for custom notation.
+          </div>
+          <v-dice-roller input-type="text" notation="2d6+3"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller input-type="text" /&gt;</div>
+        </div>
+
+        <!-- Select Dropdown -->
+        <div class="demo-card">
+          <div class="demo-title">Select Dropdown</div>
+          <div class="demo-description">
+            Dropdown menu with preset options only.
+          </div>
+          <v-dice-roller input-type="select" notation="1d20"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller input-type="select" /&gt;</div>
+        </div>
+
+        <!-- Combo (Text + Select) -->
+        <div class="demo-card">
+          <div class="demo-title">Combo Input</div>
+          <div class="demo-description">
+            Text input AND dropdown on the same line. Best of both worlds.
+          </div>
+          <v-dice-roller input-type="combo" notation="2d6"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller input-type="combo" /&gt;</div>
+        </div>
+      </div>
+
+      <h2 class="section-header">Display Options</h2>
+      <div class="demo-grid">
+        <!-- Small Result -->
+        <div class="demo-card">
+          <div class="demo-title">Small Result</div>
+          <div class="demo-description">
+            Smaller result display for inline use.
+          </div>
+          <v-dice-roller notation="1d6" result-size="small"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller result-size="small" /&gt;</div>
+        </div>
+
+        <!-- Large Result -->
+        <div class="demo-card">
+          <div class="demo-title">Large Result</div>
+          <div class="demo-description">
+            Bigger, more dramatic result display.
+          </div>
+          <v-dice-roller notation="1d20" result-size="large"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller result-size="large" /&gt;</div>
+        </div>
+
+        <!-- No Details -->
+        <div class="demo-card">
+          <div class="demo-title">No Details</div>
+          <div class="demo-description">
+            Hide individual roll breakdown, just show total.
+          </div>
+          <v-dice-roller notation="3d6+3" :show-details="false"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller :show-details="false" /&gt;</div>
+        </div>
+
+        <!-- Breakdown Format -->
+        <div class="demo-card">
+          <div class="demo-title">Breakdown Format</div>
+          <div class="demo-description">
+            Show individual dice as separate badges.
+          </div>
+          <v-dice-roller notation="4d6" detail-format="breakdown"></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller detail-format="breakdown" /&gt;</div>
+        </div>
+      </div>
+
+      <h2 class="section-header">History & Presets</h2>
+      <div class="demo-grid">
+        <!-- With History -->
+        <div class="demo-card">
+          <div class="demo-title">With History</div>
+          <div class="demo-description">
+            Track recent rolls with history display.
+          </div>
+          <v-dice-roller 
+            notation="2d6" 
+            :show-history="true"
+            :show-clear-history="true"
+          ></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller :show-history="true" /&gt;</div>
+        </div>
+
+        <!-- With Presets -->
+        <div class="demo-card">
+          <div class="demo-title">With Preset Buttons</div>
+          <div class="demo-description">
+            Quick access buttons for common dice rolls.
+          </div>
+          <v-dice-roller 
+            notation="1d20" 
+            :show-presets="true"
+          ></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller :show-presets="true" /&gt;</div>
+        </div>
+
+        <!-- No History Button -->
+        <div class="demo-card">
+          <div class="demo-title">History Without Clear</div>
+          <div class="demo-description">
+            Show history but hide the clear button.
+          </div>
+          <v-dice-roller 
+            notation="1d6" 
+            :show-history="true"
+            :show-clear-history="false"
+          ></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller :show-history="true" :show-clear-history="false" /&gt;</div>
+        </div>
+      </div>
+
+      <h2 class="section-header">Minimal Configurations</h2>
+      <div class="demo-grid">
+        <!-- Ultra Minimal -->
+        <div class="demo-card">
+          <div class="demo-title">Ultra Minimal</div>
+          <div class="demo-description">
+            Just dropdown and result. Perfect for tight spaces.
+          </div>
+          <v-dice-roller 
+            input-type="select"
+            notation="1d20"
+            :hide-roll-button="true"
+            :auto-roll="true"
+            :minimal="true"
+            result-size="small"
+          ></v-dice-roller>
+          <div class="code-block">
+&lt;v-dice-roller 
+  input-type="select"
+  :hide-roll-button="true"
+  :auto-roll="true"
+  :minimal="true"
+  result-size="small"
+/&gt;
+          </div>
+        </div>
+
+        <!-- Inline Variant -->
+        <div class="demo-card">
+          <div class="demo-title">Inline Variant</div>
+          <div class="demo-description">
+            Horizontal layout for embedding in text or toolbars.
+          </div>
+          <v-dice-roller 
+            notation="1d6"
+            variant="inline"
+            input-type="combo"
+            :show-details="false"
+          ></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller variant="inline" /&gt;</div>
+        </div>
+
+        <!-- No Input (Programmatic) -->
+        <div class="demo-card">
+          <div class="demo-title">No Input (API Only)</div>
+          <div class="demo-description">
+            Hide input, control via parent component.
+          </div>
+          <v-dice-roller 
+            notation="2d6+3"
+            :hide-input="true"
+            :auto-roll="true"
+          ></v-dice-roller>
+          <div class="code-block">&lt;v-dice-roller :hide-input="true" :auto-roll="true" /&gt;</div>
+        </div>
+      </div>
+
+      <h2 class="section-header">Available Props</h2>
+      <div class="demo-card">
+        <div class="props-list">
+          <strong>Input Configuration:</strong><br>
+          <code>notation</code> - Initial dice notation (default: "2d6")<br>
+          <code>input-type</code> - "text", "select", or "combo" (default: "text")<br>
+          <code>placeholder</code> - Input placeholder text<br>
+          <code>hide-input</code> - Hide input controls<br>
+          <code>hide-roll-button</code> - Hide the roll button<br>
+          <code>roll-button-text</code> - Custom button text (default: "🎲")<br>
+          <code>auto-roll</code> - Auto-roll on mount/change<br><br>
+
+          <strong>Presets:</strong><br>
+          <code>show-presets</code> - Show quick roll buttons<br>
+          <code>presets</code> - Array of preset notations<br><br>
+
+          <strong>Result Display:</strong><br>
+          <code>show-details</code> - Show individual roll breakdown<br>
+          <code>detail-format</code> - "inline", "breakdown", or "simple"<br>
+          <code>result-size</code> - "small", "medium", or "large"<br>
+          <code>minimal</code> - Hide notation label<br><br>
+
+          <strong>History:</strong><br>
+          <code>show-history</code> - Display roll history<br>
+          <code>show-clear-history</code> - Show clear button<br>
+          <code>history-limit</code> - Max history items (default: 10)<br>
+          <code>history-title</code> - History section title<br>
+          <code>clear-history-text</code> - Clear button text<br><br>
+
+          <strong>Styling:</strong><br>
+          <code>variant</code> - "default", "compact", or "inline"<br><br>
+
+          <strong>Behavior:</strong><br>
+          <code>seed</code> - Seed for deterministic rolls
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const { createApp } = Vue;
+
+    // Inline dice roller core (same as before)
+    const DIE_TYPES = [4, 6, 8, 10, 12, 20, 100];
+    const MIN_DICE_COUNT = 1;
+    const MAX_DICE_COUNT = 100;
+    const DICE_NOTATION_REGEX = /^(\d+)d(\d+)([+-]\d+)?$/i;
+
+    function createSeededRandom(seed) {
+      let state = seed;
+      return function() {
+        state = (state + 0x6D2B79F5) | 0;
+        let t = Math.imul(state ^ (state >>> 15), state | 1);
+        t = (t + Math.imul(t ^ (t >>> 7), t | 61)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function randomInt(min, max, rng = Math.random) {
+      return Math.floor(rng() * (max - min + 1)) + min;
+    }
+
+    function parseDiceNotation(notation) {
+      const trimmed = notation.trim();
+      const match = DICE_NOTATION_REGEX.exec(trimmed);
+      
+      if (!match) {
+        throw new Error(`Invalid dice notation "${notation}": format must be XdY or XdY±Z`);
+      }
+      
+      const count = parseInt(match[1], 10);
+      const sides = parseInt(match[2], 10);
+      const modifier = match[3] ? parseInt(match[3], 10) : 0;
+      
+      if (count < MIN_DICE_COUNT || count > MAX_DICE_COUNT) {
+        throw new Error(`Invalid dice count ${count}: must be between 1 and 100`);
+      }
+      
+      if (!DIE_TYPES.includes(sides)) {
+        throw new Error(`Invalid die type d${sides}: must be d4, d6, d8, d10, d12, d20, or d100`);
+      }
+      
+      return { count, sides, modifier };
+    }
+
+    function rollDetailed(notation, options = {}) {
+      const parsed = parseDiceNotation(notation);
+      const rng = options.seed !== undefined 
+        ? createSeededRandom(options.seed)
+        : Math.random;
+      
+      const rolls = [];
+      for (let i = 0; i < parsed.count; i++) {
+        rolls.push(randomInt(1, parsed.sides, rng));
+      }
+      
+      const total = rolls.reduce((sum, roll) => sum + roll, 0) + parsed.modifier;
+      
+      return {
+        rolls,
+        modifier: parsed.modifier,
+        total,
+        notation: notation.trim(),
+      };
+    }
+
+    // Import the component template
+    const VDiceRollerComponent = {
+      template: `
+        <div class="v-dice-roller" :class="variantClass">
+          <div v-if="!hideInput" class="dice-input-group">
+            <input
+              v-if="inputType === 'text' || inputType === 'combo'"
+              v-model="localNotation"
+              @keyup.enter="handleRoll"
+              :placeholder="placeholder"
+              class="dice-input"
+              :class="{ 'combo-input': inputType === 'combo' }"
+              type="text"
+            />
+            
+            <select
+              v-if="inputType === 'select' || inputType === 'combo'"
+              v-model="localNotation"
+              @change="autoRoll && handleRoll()"
+              class="dice-select"
+              :class="{ 'combo-select': inputType === 'combo' }"
+            >
+              <option v-if="inputType === 'select'" value="" disabled>Select dice...</option>
+              <option v-for="preset in presets" :key="preset" :value="preset">
+                {{ preset }}
+              </option>
+            </select>
+
+            <button
+              v-if="!hideRollButton"
+              @click="handleRoll"
+              class="dice-roll-btn"
+              :disabled="!localNotation"
+            >
+              {{ rollButtonText }}
+            </button>
+          </div>
+
+          <div
+            v-if="showPresets && inputType === 'text'"
+            class="dice-presets"
+          >
+            <button
+              v-for="preset in presets"
+              :key="preset"
+              @click="localNotation = preset; handleRoll()"
+              class="preset-btn"
+            >
+              {{ preset }}
+            </button>
+          </div>
+
+          <div v-if="error" class="dice-error">
+            {{ error }}
+          </div>
+
+          <div v-if="result" class="dice-result" :class="resultSizeClass">
+            <div v-if="!minimal" class="result-notation">{{ result.notation }}</div>
+            <div class="result-total">{{ result.total }}</div>
+            <div
+              v-if="showDetails && result.rolls"
+              class="result-details"
+            >
+              <template v-if="detailFormat === 'inline'">
+                [{{ result.rolls.join(', ') }}]<span v-if="result.modifier !== 0"> {{ result.modifier > 0 ? '+' : '' }}{{ result.modifier }}</span>
+              </template>
+              <template v-else-if="detailFormat === 'breakdown'">
+                <div class="breakdown">
+                  <span v-for="(roll, i) in result.rolls" :key="i" class="die-value">{{ roll }}</span>
+                  <span v-if="result.modifier !== 0" class="modifier">{{ result.modifier > 0 ? '+' : '' }}{{ result.modifier }}</span>
+                  <span class="equals">=</span>
+                  <span class="total-value">{{ result.total }}</span>
+                </div>
+              </template>
+              <template v-else>
+                Rolls: {{ result.rolls.join(', ') }}
+                <span v-if="result.modifier !== 0"> ({{ result.modifier > 0 ? '+' : '' }}{{ result.modifier }})</span>
+              </template>
+            </div>
+          </div>
+
+          <div v-if="showHistory && history.length > 0" class="dice-history">
+            <div class="history-header">
+              <span class="history-title">{{ historyTitle }}</span>
+              <button
+                v-if="showClearHistory"
+                @click="clearHistory"
+                class="clear-history-btn"
+              >
+                {{ clearHistoryText }}
+              </button>
+            </div>
+            <div class="history-items">
+              <div
+                v-for="(item, index) in displayHistory"
+                :key="index"
+                class="history-item"
+              >
+                <span class="history-notation">{{ item.notation }}</span>
+                <span class="history-total">{{ item.total }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      props: {
+        notation: { type: String, default: '2d6' },
+        inputType: { type: String, default: 'text' },
+        placeholder: { type: String, default: 'e.g., 2d6+3' },
+        hideInput: { type: Boolean, default: false },
+        hideRollButton: { type: Boolean, default: false },
+        rollButtonText: { type: String, default: '🎲' },
+        autoRoll: { type: Boolean, default: false },
+        showPresets: { type: Boolean, default: false },
+        presets: { type: Array, default: () => ['1d4', '1d6', '1d8', '1d10', '1d12', '1d20', '1d100', '2d6+3'] },
+        showDetails: { type: Boolean, default: true },
+        detailFormat: { type: String, default: 'inline' },
+        resultSize: { type: String, default: 'medium' },
+        minimal: { type: Boolean, default: false },
+        showHistory: { type: Boolean, default: false },
+        showClearHistory: { type: Boolean, default: true },
+        historyLimit: { type: Number, default: 10 },
+        historyTitle: { type: String, default: 'History' },
+        clearHistoryText: { type: String, default: 'Clear' },
+        variant: { type: String, default: 'default' },
+        seed: { type: Number, default: undefined }
+      },
+      data() {
+        return {
+          localNotation: this.notation,
+          result: null,
+          error: null,
+          history: []
+        };
+      },
+      computed: {
+        variantClass() {
+          return `variant-${this.variant}`;
+        },
+        resultSizeClass() {
+          return `size-${this.resultSize}`;
+        },
+        displayHistory() {
+          return this.history.slice(0, this.historyLimit);
+        }
+      },
+      watch: {
+        notation(newVal) {
+          this.localNotation = newVal;
+        }
+      },
+      methods: {
+        handleRoll() {
+          try {
+            this.error = null;
+            const options = this.seed !== undefined ? { seed: this.seed } : {};
+            this.result = rollDetailed(this.localNotation, options);
+            
+            if (this.showHistory) {
+              this.history.unshift({
+                notation: this.result.notation,
+                total: this.result.total
+              });
+            }
+          } catch (err) {
+            this.error = err.message;
+            this.result = null;
+          }
+        },
+        clearHistory() {
+          this.history = [];
+        }
+      },
+      mounted() {
+        if (this.autoRoll && this.localNotation) {
+          this.handleRoll();
+        }
+      }
+    };
+
+    // Add styles
+    const style = document.createElement('style');
+    style.textContent = `
+      .v-dice-roller { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+      .dice-input-group { display: flex; gap: 8px; margin-bottom: 12px; }
+      .dice-input, .dice-select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; transition: border-color 0.2s; }
+      .dice-input { flex: 1; }
+      .dice-input:focus, .dice-select:focus { outline: none; border-color: #667eea; }
+      .combo-input { flex: 2; }
+      .combo-select { flex: 1; }
+      .dice-roll-btn { padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+      .dice-roll-btn:hover:not(:disabled) { background: #5568d3; }
+      .dice-roll-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+      .dice-presets { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+      .preset-btn { padding: 6px 12px; background: white; border: 1px solid #667eea; color: #667eea; border-radius: 4px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+      .preset-btn:hover { background: #667eea; color: white; }
+      .dice-error { background: #ff4757; color: white; padding: 10px 12px; border-radius: 4px; margin-bottom: 12px; font-size: 13px; }
+      .dice-result { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 12px; }
+      .result-notation { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
+      .result-total { font-size: 48px; font-weight: bold; line-height: 1; }
+      .result-details { font-size: 13px; opacity: 0.85; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.3); }
+      .breakdown { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+      .die-value, .modifier, .total-value { padding: 4px 8px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; font-weight: 600; }
+      .equals { opacity: 0.7; }
+      .size-small .result-total { font-size: 32px; }
+      .size-small .dice-result { padding: 12px; }
+      .size-medium .result-total { font-size: 48px; }
+      .size-large .result-total { font-size: 64px; }
+      .size-large .dice-result { padding: 24px; }
+      .dice-history { border-top: 1px solid #e0e0e0; padding-top: 12px; }
+      .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+      .history-title { font-size: 13px; font-weight: 600; color: #666; }
+      .clear-history-btn { padding: 4px 8px; background: transparent; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; color: #666; cursor: pointer; transition: all 0.2s; }
+      .clear-history-btn:hover { background: #f5f5f5; }
+      .history-items { display: flex; flex-direction: column; gap: 6px; }
+      .history-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f8f9fa; border-radius: 4px; font-size: 13px; }
+      .history-notation { color: #667eea; font-weight: 600; }
+      .history-total { font-weight: bold; color: #333; }
+      .variant-compact .dice-input-group { margin-bottom: 8px; }
+      .variant-compact .dice-result { padding: 12px; }
+      .variant-compact .result-total { font-size: 36px; }
+      .variant-inline .dice-input-group { margin-bottom: 0; }
+      .variant-inline .dice-result { display: inline-flex; align-items: center; gap: 12px; padding: 8px 16px; margin-bottom: 0; }
+      .variant-inline .result-notation { margin-bottom: 0; }
+      .variant-inline .result-total { font-size: 24px; }
+      .variant-inline .result-details { margin-top: 0; padding-top: 0; border-top: none; }
+    `;
+    document.head.appendChild(style);
+
+    createApp({
+      components: {
+        'v-dice-roller': VDiceRollerComponent
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
