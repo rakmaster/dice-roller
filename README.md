@@ -1,5 +1,10 @@
 # 🎲 Dice Roller
 
+[![npm version](https://img.shields.io/npm/v/@dice-roller/core.svg)](https://www.npmjs.com/package/@dice-roller/core)
+[![npm downloads](https://img.shields.io/npm/dm/@dice-roller/core.svg)](https://www.npmjs.com/package/@dice-roller/core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/rakmaster/dice-roller.svg)](https://github.com/rakmaster/dice-roller/stargazers)
+
 A framework-agnostic dice roller library with highly configurable Vue 3 component for RPG and gaming applications.
 
 **[📚 Live Demo & Documentation](https://rakmaster.github.io/dice-roller/)**
